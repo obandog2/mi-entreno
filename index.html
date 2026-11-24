@@ -33,7 +33,6 @@ main{padding:16px}
 .minis-row>div{flex:none}
 details{margin-top:6px;font-size:14px}
 details summary{color:var(--p);cursor:pointer}
-.acciones{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .btn{width:100%;padding:13px;border:0;border-radius:14px;background:var(--p);color:#fff;font-size:16px;font-weight:600;margin:4px 0;font-family:inherit}
 .btn.sec{background:var(--bg);color:var(--txt);border:1px solid var(--line)}
 .btn.peligro{background:var(--bad)}
@@ -221,15 +220,48 @@ nav.bottom button.on{color:var(--p);font-weight:600}
 
 <script>
 /* ===================== CATÁLOGO ===================== */
-// Ilustraciones simplificadas (pictogramas) creadas para esta app.
+// Cada movimiento tiene dos posturas (A y B). La app alterna entre ellas en bucle.
 const POSES = {
-  pie:        { cabeza: [60, 18], lineas: [[[60,30],[60,68]], [[60,38],[44,56],[42,72]], [[60,38],[76,56],[78,72]], [[60,68],[54,90],[54,110]], [[60,68],[66,90],[66,110]]] },
-  sentadilla: { cabeza: [60, 30], lineas: [[[60,42],[56,72]], [[60,48],[86,50]], [[56,72],[40,90],[46,110]], [[56,72],[72,90],[68,110]]] },
-  zancada:    { cabeza: [60, 22], lineas: [[[60,34],[58,68]], [[60,42],[44,58],[40,72]], [[60,42],[76,58],[80,72]], [[58,68],[44,88],[44,110]], [[58,68],[76,88],[92,110]]] },
-  flexion:    { cabeza: [34, 50], lineas: [[[44,62],[104,78],[108,104]], [[44,62],[44,106]]] },
-  plancha:    { cabeza: [24, 62], lineas: [[[36,70],[104,80]], [[38,70],[36,104]]] },
-  puente:     { cabeza: [24, 94], lineas: [[[38,96],[68,62],[90,80],[100,104]]] },
-  abdominal:  { cabeza: [36, 80], lineas: [[[46,90],[78,100]], [[78,100],[96,78],[100,104]]] }
+  pie: { dur: "2s", frames: [
+    { h: [60,18], l: [[[60,30],[60,68]], [[60,38],[44,56],[42,72]], [[60,38],[76,56],[78,72]], [[60,68],[54,90],[54,110]], [[60,68],[66,90],[66,110]]] },
+    { h: [60,18], l: [[[60,30],[60,68]], [[60,38],[44,56],[42,72]], [[60,38],[76,56],[78,72]], [[60,68],[54,90],[54,110]], [[60,68],[66,90],[66,110]]] }
+  ]},
+  talones: { dur: "2.4s", frames: [
+    { h: [60,18], l: [[[60,30],[60,68]], [[60,38],[44,56],[42,72]], [[60,38],[76,56],[78,72]], [[60,68],[54,90],[54,110]], [[60,68],[66,90],[66,110]]] },
+    { h: [60,16], l: [[[60,30],[60,68]], [[60,38],[44,56],[42,72]], [[60,38],[76,56],[78,72]], [[60,68],[54,88],[52,104]], [[60,68],[66,88],[68,104]]] }
+  ]},
+  jump: { dur: "1s", frames: [
+    { h: [60,18], l: [[[60,30],[60,68]], [[60,38],[44,56],[42,72]], [[60,38],[76,56],[78,72]], [[60,68],[54,90],[54,110]], [[60,68],[66,90],[66,110]]] },
+    { h: [60,18], l: [[[60,30],[60,68]], [[60,38],[40,24],[30,10]], [[60,38],[80,24],[90,10]], [[60,68],[40,90],[34,110]], [[60,68],[80,90],[86,110]]] }
+  ]},
+  marcha: { dur: "1.2s", frames: [
+    { h: [60,18], l: [[[60,30],[60,68]], [[60,38],[44,56],[42,72]], [[60,38],[76,56],[78,72]], [[60,68],[50,88],[48,110]], [[60,68],[72,84],[84,96]]] },
+    { h: [60,18], l: [[[60,30],[60,68]], [[60,38],[76,56],[78,72]], [[60,38],[44,56],[42,72]], [[60,68],[48,84],[36,96]], [[60,68],[70,88],[72,110]]] }
+  ]},
+  sentadilla: { dur: "2.4s", frames: [
+    { h: [60,18], l: [[[60,30],[60,68]], [[60,38],[44,56],[42,72]], [[60,38],[76,56],[78,72]], [[60,68],[54,90],[54,110]], [[60,68],[66,90],[66,110]]] },
+    { h: [60,34], l: [[[60,44],[58,74]], [[60,46],[72,50],[86,50]], [[60,46],[72,50],[86,50]], [[58,74],[40,90],[46,110]], [[58,74],[72,90],[68,110]]] }
+  ]},
+  zancada: { dur: "2.6s", frames: [
+    { h: [60,18], l: [[[60,30],[60,68]], [[60,38],[44,56],[42,72]], [[60,38],[76,56],[78,72]], [[60,68],[54,90],[54,110]], [[60,68],[66,90],[66,110]]] },
+    { h: [60,22], l: [[[60,30],[60,64]], [[60,38],[44,50],[40,62]], [[60,38],[76,50],[80,62]], [[60,64],[44,88],[44,110]], [[60,64],[80,86],[96,110]]] }
+  ]},
+  flexion: { dur: "2s", frames: [
+    { h: [34,50], l: [[[44,62],[104,78],[108,104]], [[44,62],[44,106]]] },
+    { h: [34,64], l: [[[40,70],[104,80],[108,104]], [[40,70],[40,106]]] }
+  ]},
+  plancha: { dur: "2.4s", frames: [
+    { h: [24,62], l: [[[36,66],[104,76]], [[38,66],[36,104]]] },
+    { h: [24,63], l: [[[36,68],[104,80]], [[38,68],[36,104]]] }
+  ]},
+  puente: { dur: "2.4s", frames: [
+    { h: [26,94], l: [[[36,96],[70,100],[100,104]]] },
+    { h: [26,94], l: [[[36,96],[68,64],[100,104]]] }
+  ]},
+  abdominal: { dur: "2.2s", frames: [
+    { h: [28,100], l: [[[40,104],[80,104]], [[80,104],[100,96],[108,104]]] },
+    { h: [40,84], l: [[[48,90],[80,104]], [[80,104],[100,96],[108,104]]] }
+  ]}
 };
 
 const EJERCICIOS = [
@@ -239,7 +271,7 @@ const EJERCICIOS = [
     como: "Da un paso largo al frente y baja hasta que ambas rodillas queden cerca de los 90°. Vuelve a la posición inicial y alterna la pierna." },
   { id: "puente", nombre: "Puente de glúteo", grupo: "Glúteos", nivel: "Principiante", pose: "puente",
     como: "Tumbado boca arriba, rodillas flexionadas y pies apoyados. Sube la cadera apretando los glúteos y baja controlando el movimiento." },
-  { id: "talones", nombre: "Elevación de talones", grupo: "Piernas", nivel: "Principiante", pose: "pie",
+  { id: "talones", nombre: "Elevación de talones", grupo: "Piernas", nivel: "Principiante", pose: "talones",
     como: "De pie, sube sobre la punta de los pies y baja despacio. Puedes apoyarte en una pared para mantener el equilibrio." },
   { id: "flexiones", nombre: "Flexiones", grupo: "Pecho y brazos", nivel: "Intermedio", pose: "flexion",
     como: "Manos un poco más anchas que los hombros. Baja el pecho sin arquear la espalda y sube empujando. Si cuesta, apóyate sobre las rodillas." },
@@ -247,11 +279,11 @@ const EJERCICIOS = [
     como: "Apóyate en los antebrazos y las puntas de los pies. Cuerpo en línea recta de la cabeza a los talones, sin hundir la cadera." },
   { id: "abdominales", nombre: "Abdominales", grupo: "Core", nivel: "Principiante", pose: "abdominal",
     como: "Tumbado con las rodillas flexionadas, eleva los hombros del suelo contrayendo el abdomen. No jales el cuello con las manos." },
-  { id: "jumping", nombre: "Jumping jacks", grupo: "Cardio", nivel: "Principiante", pose: "pie",
+  { id: "jumping", nombre: "Jumping jacks", grupo: "Cardio", nivel: "Principiante", pose: "jump",
     como: "Salta abriendo las piernas y levantando los brazos a la vez; vuelve a la posición inicial. Mantén un ritmo constante." },
   { id: "sentadillaSalto", nombre: "Sentadilla con salto", grupo: "Cardio", nivel: "Avanzado", pose: "sentadilla",
     como: "Haz una sentadilla y al subir salta con fuerza. Aterriza suave doblando las rodillas." },
-  { id: "marcha", nombre: "Marcha en el sitio", grupo: "Cardio", nivel: "Principiante", pose: "pie",
+  { id: "marcha", nombre: "Marcha en el sitio", grupo: "Cardio", nivel: "Principiante", pose: "marcha",
     como: "Camina en el sitio levantando las rodillas y moviendo los brazos. Es ideal para calentar." }
 ];
 const EJ = Object.fromEntries(EJERCICIOS.map(e => [e.id, e]));
@@ -314,14 +346,29 @@ const abrir = id => $("#" + id).classList.add("abierto");
 const cerrar = id => $("#" + id).classList.remove("abierto");
 
 /* ===================== IMÁGENES ===================== */
+// Figura animada en SVG: alterna entre la postura A y la B en bucle.
 function figuraSVG(pose) {
   const p = POSES[pose] || POSES.pie;
-  const lineas = p.lineas.map(l =>
-    `<polyline points="${l.map(q => q.join(",")).join(" ")}" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`
-  ).join("");
+  const [a, b] = p.frames;
+  const t = p.dur;
+  const ciclo = (v1, v2) => [v1, v2, v1].join(";");
+
+  const lineas = a.l.map((linea, i) => {
+    const valores = [a.l[i], b.l[i], a.l[i]]
+      .map(pl => pl.map(q => q.join(",")).join(" ")).join(";");
+    return `<polyline points="${linea.map(q => q.join(",")).join(" ")}" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+      <animate attributeName="points" values="${valores}" dur="${t}" repeatCount="indefinite" calcMode="spline" keyTimes="0;.5;1" keySplines=".45 0 .55 1;.45 0 .55 1"/>
+    </polyline>`;
+  }).join("");
+
   return `<svg viewBox="0 0 120 120" aria-hidden="true">
     <line x1="8" y1="112" x2="112" y2="112" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" opacity=".5"/>
-    <circle cx="${p.cabeza[0]}" cy="${p.cabeza[1]}" r="9" fill="currentColor"/>${lineas}</svg>`;
+    <circle r="9" fill="currentColor" cx="${a.h[0]}" cy="${a.h[1]}">
+      <animate attributeName="cx" values="${ciclo(a.h[0], b.h[0])}" dur="${t}" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="${ciclo(a.h[1], b.h[1])}" dur="${t}" repeatCount="indefinite"/>
+    </circle>
+    ${lineas}
+  </svg>`;
 }
 
 const fotos = {}; // ejId -> URL de la foto personal
